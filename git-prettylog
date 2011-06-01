@@ -1,0 +1,4 @@
+#!/bin/bash
+# Outputs a nice log graph
+
+git log --oneline --all --graph --decorate
