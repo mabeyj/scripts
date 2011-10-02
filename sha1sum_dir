@@ -13,7 +13,13 @@ for path in "$@"
 do
 	if [[ -d $path ]]
 	then
-		sha=`find "$path" -type d -regex ".*/\..*" -prune -o -type f -print | sed 's/^\|$/"/g' | sort | xargs cat | sha1sum`
+		# Get list of hashes for each file and then hash the list -- includes
+		# filenames, so moved, but identical files results in different hash
+
+		cd "$path"
+		sha=`find -type d -regex ".*/\..*" -prune -o -type f -print | sed 's/^\|$/"/g' | xargs sha1sum | sort | sha1sum`
+		cd - > /dev/null
+
 		echo ${sha/-/$path}
 	else
 		echo `sha1sum $path`
